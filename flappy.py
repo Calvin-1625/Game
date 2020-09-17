@@ -1,4 +1,4 @@
-import pygame, sys
+import pygame, sys, random
 
 # dedicate for mounting the base surface on the image
 def draw_base():
@@ -6,7 +6,8 @@ def draw_base():
 	screen.blit(base_surface,(base_x_pos + 288, 450))
 
 def create_pipe():
-	new_pipe = pipe_surface.get_rect(midtop = (350, 256))
+	random_pipe_pos = random.choice(pipe_height)
+	new_pipe = pipe_surface.get_rect(midtop = (350, random_pipe_pos))
 	return new_pipe
 
 def move_pipes(pipes):
@@ -47,6 +48,7 @@ pipe_list = []
 #USEREVENT  is triggered by timer
 SPAWNPIPE = pygame.USEREVENT
 pygame.time.set_timer(SPAWNPIPE, 1200)
+pipe_height = [200, 300, 400]
 
 
 #Implement the game loop
