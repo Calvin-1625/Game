@@ -22,7 +22,8 @@ bg_surface = pygame.image.load('assets/background-day.png').convert()
 base_surface = pygame.image.load('assets/base.png').convert()
 base_x_pos = 0
 
-
+bird_surface = pygame.image.load('assets/bluebird-midflap.png').convert()
+bird_rect = bird_surface.get_rect(center = (50, 256))
 
 #Implement the game loop
 while True:
@@ -32,6 +33,7 @@ while True:
 			sys.exit()
 	# to position the bg-surface blit method in x-axis and y-axis top left
 	screen.blit(bg_surface,(0,0))
+	screen.blit(bird_surface, bird_rect)
 	base_x_pos -=1 # animation effect for the base x axis(+ move to right , - move to left)
 	draw_base()
 	if base_x_pos <= -288 :
