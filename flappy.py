@@ -27,9 +27,12 @@ def draw_pipes(pipes):
 def check_collision(pipes):
 	for pipe in pipes:
 		if bird_rect.colliderect(pipe):
-			print("collision detected")
+			return False
 	if bird_rect.top <= -50 or bird_rect.bottom >= 450:
-		print("collision detected")
+		return False
+	return True
+
+
 # initialize Pygame
 pygame.init()
 
@@ -41,6 +44,7 @@ clock = pygame.time.Clock()
 # initialize the gravity we will use
 gravity = 0.25
 bird_movement = 0
+game_active = True
 
 #background surface, image.load("directory").convert()
 bg_surface = pygame.image.load('assets/background-day.png').convert()
@@ -68,24 +72,31 @@ while True:
 			pygame.quit()
 			sys.exit()
 		if event.type == pygame.KEYDOWN:
-			if event.key == pygame.K_SPACE:
+			if event.key == pygame.K_SPACE and game_active:
 				bird_movement = 0
 				bird_movement -= 6
 				#print("Space Bar")
+			if event.key == pygame.K_SPACE and game_active == False:
+				# back everything to start
+				game_active = True
+				pipe_list.clear()
+				bird_rect.center = (50, 256) # back the bird to default place
+				bird_movement = 0
 		if event.type == SPAWNPIPE:
 			pipe_list.extend(create_pipe())
 			# print(pipe_list)
 	# to position the bg-surface blit method in x-axis and y-axis top left  
 	screen.blit(bg_surface,(0,0))
 	
-	bird_movement += gravity
-	#center x left and right center y up and down
-	bird_rect.centery += bird_movement
-	screen.blit(bird_surface, bird_rect)
-	check_collision(pipe_list)
+	if game_active:
+		bird_movement += gravity
+		#center x left and right center y up and down
+		bird_rect.centery += bird_movement
+		screen.blit(bird_surface, bird_rect)
+		game_active = check_collision(pipe_list)
 
-	pipe_list = move_pipes(pipe_list)
-	draw_pipes(pipe_list)
+		pipe_list = move_pipes(pipe_list)
+		draw_pipes(pipe_list)
 	
 	base_x_pos -=1 # animation effect for the base x axis(+ move to right , - move to left)
 	draw_base()
