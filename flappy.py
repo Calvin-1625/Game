@@ -7,8 +7,9 @@ def draw_base():
 
 def create_pipe():
 	random_pipe_pos = random.choice(pipe_height)
-	new_pipe = pipe_surface.get_rect(midtop = (350, random_pipe_pos))
-	return new_pipe
+	bottom_pipe = pipe_surface.get_rect(midtop = (350, random_pipe_pos))
+	top_pipe = pipe_surface.get_rect(midbottom = (350, random_pipe_pos - 150 ))
+	return bottom_pipe, top_pipe
 
 def move_pipes(pipes):
 	for pipe in pipes:
@@ -17,7 +18,11 @@ def move_pipes(pipes):
 
 def draw_pipes(pipes):
 	for pipe in pipes:
-		screen.blit(pipe_surface, pipe)
+		if pipe.bottom >= 512:
+			screen.blit(pipe_surface, pipe)
+		else:
+			flip_pipe = pygame.transform.flip(pipe_surface, False, True) # False for the x axis, True for the y axis
+			screen.blit(flip_pipe, pipe)
 
 
 # initialize Pygame
@@ -63,8 +68,8 @@ while True:
 				bird_movement -= 6
 				#print("Space Bar")
 		if event.type == SPAWNPIPE:
-			pipe_list.append(create_pipe())
-			print(pipe_list)
+			pipe_list.extend(create_pipe())
+			# print(pipe_list)
 	# to position the bg-surface blit method in x-axis and y-axis top left  
 	screen.blit(bg_surface,(0,0))
 	
