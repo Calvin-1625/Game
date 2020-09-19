@@ -36,6 +36,11 @@ def rotate_bird(bird):
 	new_bird = pygame.transform.rotozoom(bird, -bird_movement *3, 1) #(surface, angle, scale)
 	return new_bird
 
+def bird_animation():
+	new_bird = bird_frames[bird_index]
+	new_bird_rect = new_bird.get_rect(center = (50, bird_rect.centery))
+	return new_bird, new_bird_rect
+
 # initialize Pygame
 pygame.init()
 
@@ -57,8 +62,19 @@ bg_surface = pygame.image.load('assets/background-day.png').convert()
 base_surface = pygame.image.load('assets/base.png').convert()
 base_x_pos = 0
 
-bird_surface = pygame.image.load('assets/bluebird-midflap.png').convert_alpha()
+# bird_surface = pygame.image.load('assets/bluebird-midflap.png').convert_alpha()
+# bird_rect = bird_surface.get_rect(center = (50, 256))
+
+bird_downflap = pygame.image.load('assets/bluebird-downflap.png').convert_alpha()
+bird_midflap = pygame.image.load('assets/bluebird-midflap.png').convert_alpha()
+bird_upflap = pygame.image.load('assets/bluebird-upflap.png').convert_alpha()
+bird_frames = [bird_downflap, bird_midflap, bird_upflap]
+bird_index =0
+bird_surface = bird_frames[bird_index]
 bird_rect = bird_surface.get_rect(center = (50, 256))
+
+BIRDFLAP = pygame.USEREVENT + 1
+pygame.time.set_timer(BIRDFLAP, 200)
 
 pipe_surface = pygame.image.load('assets/pipe-green.png').convert()
 pipe_list = []
@@ -88,6 +104,15 @@ while True:
 		if event.type == SPAWNPIPE:
 			pipe_list.extend(create_pipe())
 			# print(pipe_list)
+
+		if event.type == BIRDFLAP:
+			if bird_index < 2:
+				bird_index += 1
+
+		else:
+			bird_index = 0
+
+		bird_surface, bird_rect = bird_animation()
 	# to position the bg-surface blit method in x-axis and y-axis top left  
 	screen.blit(bg_surface,(0,0))
 	
