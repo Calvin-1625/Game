@@ -108,6 +108,8 @@ SPAWNPIPE = pygame.USEREVENT
 pygame.time.set_timer(SPAWNPIPE, 1200)
 pipe_height = [200, 300, 400]
 
+game_over_surface = pygame.image.load('assets/gameover.png').convert_alpha()
+game_over_rect = game_over_surface.get_rect(center = (144, 256))
 
 #Implement the game loop
 while True:
@@ -158,12 +160,14 @@ while True:
 		score_display('current_game')
 
 	else:
+		screen.blit(game_over_surface, game_over_rect)
 		high_score = update_score(score, high_score)
 		score_display('game_over')
+
 	
 	base_x_pos -=1 # animation effect for the base x axis(+ move to right , - move to left)
 	draw_base()
-	if base_x_pos <= -288 :
+	if base_x_pos <= -288 :  
 		base_x_pos = 0
 
 	pygame.display.update()
